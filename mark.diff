@@ -1,0 +1,27 @@
+diff -Naur original/src/server.c patched/src/server.c
+--- original/src/server.c	2015-11-26 20:34:08.904377530 +0800
++++ patched/src/server.c	2015-11-26 20:29:10.378309632 +0800
+@@ -373,6 +373,9 @@
+         return NULL;
+     }
+ 
++    int mark = 1;
++    setsockopt(sockfd, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
++    
+     int opt = 1;
+     setsockopt(sockfd, SOL_TCP, TCP_NODELAY, &opt, sizeof(opt));
+ #ifdef SO_NOSIGPIPE
+diff -Naur original/src/udprelay.c patched/src/udprelay.c
+--- original/src/udprelay.c	2015-11-26 20:34:08.904377530 +0800
++++ patched/src/udprelay.c	2015-11-26 20:32:53.229505645 +0800
+@@ -378,6 +378,10 @@
+             return -1;
+         }
+     }
++
++    int mark = 1;
++    setsockopt(remote_sock, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
++
+     return remote_sock;
+ }
+ 

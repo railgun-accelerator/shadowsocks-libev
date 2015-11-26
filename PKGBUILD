@@ -1,43 +1,47 @@
-# Maintainer: jiangxq <jiangxueqian at gmail dot com>
-# Contributor: Felix Yan <felixonmars@archlinux.org>, 4679kun <admin at 4679 dot us>
+# $Id$
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: jiangxq <jiangxueqian at gmail dot com>
+# Contributor: zh99998 <zh99998@gmail.com>
+# Contributor: 4679kun <admin at 4679 dot us>
 
 pkgname=shadowsocks-libev
-pkgver=2.3.3
-pkgrel=2
-pkgdesc='A lightweight secured scoks5 proxy for embedded devices and low end boxes'
+pkgver=2.4.1.20151031
+_commit=4fe15c4868921724dec64c70ba236226b83d41b9
+pkgrel=1
+pkgdesc='A lightweight secured socks5 proxy for embedded devices and low end boxes'
 arch=('i686' 'x86_64')
 url='https://github.com/shadowsocks/shadowsocks-libev'
 license=('GPL3')
-depends=('openssl' 'libev')
-makedepends=('gcc' 'make' 'autoconf' 'automake')
-source=("https://github.com/shadowsocks/${pkgname}/archive/v${pkgver}.tar.gz"
+depends=('libcap' 'openssl' 'libsodium' 'libev' 'udns')
+makedepends=('git')
+install=${pkgname}.install
+source=("git+https://github.com/shadowsocks/${pkgname}.git#commit=$_commit"
         'shadowsocks-libev@.service'
         'shadowsocks-libev-server@.service'
         'shadowsocks-libev-redir@.service'
         'shadowsocks-libev-tunnel@.service'
-)
+        'mark.diff')
 
-sha512sums=(
-'d3cd1a523a14850321b312ad1e652099a5bb875e243c960f2883f2484b8c61738f432818acf288ba0d658c948b2b60b9dc72c6beee6de649dffef3236e7500a7'
-'f0ca4f5ddb0877d692275c2b78a2f470b05e81a248e641c0afcbb54b21b68af969faeeca200ff38d152c3229b77353969dade0fd54c9d69fa1abb2aedfae9e3d'
-'238a45e0ad5cdf1cdf835f94cdd914d6200596f439722f68cf100ac1d3dce4165ccbee9c03256fc084695974763363bf3313e94d366f4e1a8199de61579f50d0'
-'d51aea23e4b4f9e4b8f290dca4da86c8cac4f5a08fe6444c650a72e3ffa244cbf3bdc88247231272dafb8d366d412b0401a7717b48c7d8ca1b90b023b10b2087'
-'aa91d2e5556aa1c9ea5c1c3230e7bb209f2228d5fe03c03e2a175e9eb1dfcb9cabdfc388e5bdca5615c98784d8c7d208a329d4e50a0795c07cecdba480f18850'
-)
+sha512sums=('SKIP'
+            '96e5c9ba04a8d45fa57728aeb5282cf25fce42baf2c2221c5040cced89196b25d2c212472ba9b3f53bdce93ad1edd5f06e42ec62ef212764349c1dab24dde16a'
+            '73925959731b7ab6e2b3900662f4b67a9986b798b1a4a943307c87574c9069e32a0c2298cf6e9adb895fe71316a3bac09cb684c54e8a1350566b2fe7526c1cff'
+            'bc336201afdc556130fc0bcacaf8be1588640d9d5426637eca8db473389910f6bfba39672cd69e7fa90548fe83cf8e6006f0f27dab7c937501faa1cdd09629c5'
+            'd03e0af078a4c996f300c773dd4f13b20f28717913bfe2c58bf7894fa6673940a4a0d9357464dc46956d83ca1dcdab73dd97569e2a95fb6f22ac72571c4f23be'
+            'SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver"
-	./autogen.sh
-	./configure --prefix=/usr --enable-shared
-	make
+  cd "$srcdir/$pkgname"
+  patch -uNp1 -i $srcdir/mark.diff
+  ./autogen.sh
+  ./configure --prefix=/usr --enable-shared --enable-system-shared-lib
+  make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver"
-	make DESTDIR="$pkgdir/" install
-	install -Dm644 "$srcdir/shadowsocks-libev@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev@.service"
-	install -Dm644 "$srcdir/shadowsocks-libev-server@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-server@.service"
-        install -Dm644 "$srcdir/shadowsocks-libev-redir@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-redir@.service"
-        install -Dm644 "$srcdir/shadowsocks-libev-tunnel@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-tunnel@.service"
+  cd "$srcdir/$pkgname"
+  make DESTDIR="$pkgdir/" install
+  install -Dm644 "$srcdir/shadowsocks-libev@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev@.service"
+  install -Dm644 "$srcdir/shadowsocks-libev-server@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-server@.service"
+  install -Dm644 "$srcdir/shadowsocks-libev-redir@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-redir@.service"
+  install -Dm644 "$srcdir/shadowsocks-libev-tunnel@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-tunnel@.service"
 }
-
