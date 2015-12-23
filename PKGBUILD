@@ -5,8 +5,7 @@
 # Contributor: 4679kun <admin at 4679 dot us>
 
 pkgname=shadowsocks-libev
-pkgver=2.4.1.20151031
-_commit=4fe15c4868921724dec64c70ba236226b83d41b9
+pkgver=2.4.3
 pkgrel=1
 pkgdesc='A lightweight secured socks5 proxy for embedded devices and low end boxes'
 arch=('i686' 'x86_64')
@@ -15,7 +14,7 @@ license=('GPL3')
 depends=('libcap' 'openssl' 'libsodium' 'libev' 'udns')
 makedepends=('git')
 install=${pkgname}.install
-source=("git+https://github.com/shadowsocks/${pkgname}.git#commit=$_commit"
+source=("git+https://github.com/shadowsocks/${pkgname}.git#tag=v$pkgver"
         'shadowsocks-libev@.service'
         'shadowsocks-libev-server@.service'
         'shadowsocks-libev-redir@.service'
