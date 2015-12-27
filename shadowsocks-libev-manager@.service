@@ -1,0 +1,12 @@
+[Unit]
+Description=Ss-server controller for multi-user management and traffic statistics
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+ExecStart=/usr/bin/ss-manager -c /etc/shadowsocks/%i.json
+
+[Install]
+WantedBy=multi-user.target
+
