@@ -5,7 +5,7 @@
 # Contributor: 4679kun <admin at 4679 dot us>
 
 pkgname=shadowsocks-libev
-pkgver=2.4.3
+pkgver=2.4.4
 pkgrel=1
 pkgdesc='A lightweight secured socks5 proxy for embedded devices and low end boxes'
 arch=('i686' 'x86_64')
@@ -19,7 +19,7 @@ source=("git+https://github.com/shadowsocks/${pkgname}.git#tag=v$pkgver"
         'shadowsocks-libev-server@.service'
         'shadowsocks-libev-redir@.service'
         'shadowsocks-libev-tunnel@.service'
-        'shadowsocks-libev-manager@.service'
+        'shadowsocks-libev-manager@.service'        
         'mark.diff')
 
 sha512sums=('SKIP'
@@ -45,5 +45,4 @@ package() {
   install -Dm644 "$srcdir/shadowsocks-libev-server@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-server@.service"
   install -Dm644 "$srcdir/shadowsocks-libev-redir@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-redir@.service"
   install -Dm644 "$srcdir/shadowsocks-libev-tunnel@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-tunnel@.service"
-  install -Dm644 "$srcdir/shadowsocks-libev-manager@.service" "$pkgdir/usr/lib/systemd/system/shadowsocks-libev-manager@.service"
 }
